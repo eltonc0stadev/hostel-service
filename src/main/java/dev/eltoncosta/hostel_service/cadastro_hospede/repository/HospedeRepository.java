@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface HospedeRepository extends MongoRepository<Hospede, String> {
-    Optional<Hospede> findByCpf(String cpf);
+    Optional<Hospede> findByCpfAfterAndDataDeCheckOut(String cpf);
 }

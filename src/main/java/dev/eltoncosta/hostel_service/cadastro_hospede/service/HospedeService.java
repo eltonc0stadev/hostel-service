@@ -19,7 +19,7 @@ public class HospedeService {
     private final HospedeRepository hospedeRepository;
     private final CidadeRepository cidadeRepository;
 
-    public Hospede cadastrarHospede(Hospede hospede) {
+    public Hospede registrarHospede(Hospede hospede) {
         if (hospede.getNome() == null || hospede.getCpf() == null || hospede.getCidade() == null || hospede.getValorDaDiaria() == null) {
             throw new IllegalArgumentException("Campos obrigatórios não podem ser nulos");
         }
@@ -32,10 +32,10 @@ public class HospedeService {
         return hospedeRepository.save(hospede);
     }
 
-    public Hospede buscarHospedePorCpf(String cpf) {
-        Optional<Hospede> optionalHospede = hospedeRepository.findByCpf(cpf);
+    public Hospede buscarHospedePorId(String id) {
+        Optional<Hospede> optionalHospede = hospedeRepository.findById(id);
         if (optionalHospede.isEmpty()) {
-            throw new IllegalArgumentException("Hospede não encontrado com o CPF: " + cpf);
+            throw new IllegalArgumentException("Hospede não encontrado com o ID: " + id);
         }
         return optionalHospede.get();
     }
@@ -82,7 +82,7 @@ public class HospedeService {
     }
 
     public Hospede atualizarHospedeCidade(String id, String cidadeNome) {
-        return this.atualizarHospede(id, Hospede.builder().cidade(cidadeRepository.findByName(cidadeNome)
+        return this.atualizarHospede(id, Hospede.builder().cidade(cidadeRepository.findByCidade(cidadeNome)
                 .orElseThrow(() -> new IllegalArgumentException("Cidade não encontrada"))).build());
     }
 

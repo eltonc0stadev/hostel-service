@@ -1,9 +1,12 @@
 package dev.eltoncosta.hostel_service.cadastro_hospede.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.eltoncosta.hostel_service.entity.Funcionario;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,9 +15,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@Document(collection = "cadastro")
+@Document(collection = "cadastros")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cadastro {
 
     @Id
@@ -23,7 +28,9 @@ public class Cadastro {
     private Funcionario funcionario;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Convenio convenio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDeChegada;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDeSaida;
     private Long totalDias;
     private Status status;
@@ -37,12 +44,13 @@ public class Cadastro {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void getTotalDias() {
+    public Long getTotalDias() {
         if (dataDeChegada != null && dataDeSaida != null) {
             this.totalDias = ChronoUnit.DAYS.between(dataDeChegada, dataDeSaida);
         } else {
             this.totalDias = 0L;
         }
+        return this.totalDias;
     }
 
     @Override

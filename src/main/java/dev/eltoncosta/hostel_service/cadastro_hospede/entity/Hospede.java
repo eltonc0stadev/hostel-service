@@ -1,8 +1,7 @@
 package dev.eltoncosta.hostel_service.cadastro_hospede.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,9 +9,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-@Document(collection = "hospede")
+@Document(collection = "hospedes")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Hospede {
 
     @Id
@@ -20,6 +21,7 @@ public class Hospede {
     private String nome; //nome completo
     private String cpf;
     private BigDecimal valorDaDiaria;
+    @NonNull
     private Cidade cidade;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDeCheckIn;

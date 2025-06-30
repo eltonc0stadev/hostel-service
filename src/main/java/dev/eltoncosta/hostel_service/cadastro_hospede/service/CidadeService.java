@@ -1,5 +1,6 @@
 package dev.eltoncosta.hostel_service.cadastro_hospede.service;
 
+import dev.eltoncosta.hostel_service.cadastro_hospede.controller.request.CidadeRequest;
 import dev.eltoncosta.hostel_service.cadastro_hospede.entity.Cidade;
 import dev.eltoncosta.hostel_service.cadastro_hospede.repository.CidadeRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +14,27 @@ public class CidadeService {
 
     private final CidadeRepository cidadeRepository;
 
-    public Cidade cadastrarCidade(Cidade cidade) {
-        if (cidadeRepository.existsByCidade(cidade.getCidade())) {
+    public Cidade registrarCidade(CidadeRequest cidade) {
+        if (cidadeRepository.existsByCidade(cidade.cidade())) {
             throw new IllegalArgumentException("Cidade já cadastrada");
         }
-        if (cidade.getCidade() == null || cidade.getEstado() == null) {
+        if (cidade.cidade() == null || cidade.estado() == null) {
             throw new IllegalArgumentException("Cidade e Estado não podem ser nulos");
         }
-        return cidadeRepository.save(cidade);
+        Cidade novaCidade = Cidade.builder()
+                .cidade(cidade.cidade())
+                .estado(cidade.estado())
+                .build();
+        return cidadeRepository.save(novaCidade);
     }
 
     public List<Cidade> listarCidades() {
         return cidadeRepository.findAll();
+    }
+
+    public Cidade buscarCidadePorId(String id) {
+        return cidadeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cidade não encontrada"));
     }
 
     public void removerCidade(String id) {
