@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Document(collection = "cadastros")
@@ -30,9 +29,6 @@ public class Cadastro {
     private Convenio convenio;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataDeChegada;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dataDeSaida;
-    private Long totalDias;
     private Status status;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private MetodoDePagamento metodoDePagamento;
@@ -44,15 +40,6 @@ public class Cadastro {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Long getTotalDias() {
-        if (dataDeChegada != null && dataDeSaida != null) {
-            this.totalDias = ChronoUnit.DAYS.between(dataDeChegada, dataDeSaida);
-        } else {
-            this.totalDias = 0L;
-        }
-        return this.totalDias;
-    }
-
     @Override
     public String toString() {
         return "Cadastro{" +
@@ -61,8 +48,6 @@ public class Cadastro {
                 ", funcionario=" + funcionario +
                 ", convenio=" + convenio +
                 ", dataDeChegada=" + dataDeChegada +
-                ", dataDeSaida=" + dataDeSaida +
-                ", totalDias=" + totalDias +
                 ", status=" + status +
                 ", metodoDePagamento=" + metodoDePagamento +
                 ", valorTotalDiarias=" + valorTotalDiarias +

@@ -46,13 +46,9 @@ public class CadastroService {
                 .funcionario(funcionario)
                 .convenio(convenio)
                 .dataDeChegada(LocalDate.parse(cadastro.dataDeChegada(), DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .dataDeSaida(LocalDate.parse(cadastro.dataDeSaida(), DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .build();
         novoCadastro.calcularValorTotalDiarias();
         novoCadastro.setStatus(novoCadastro.getConvenio() != null ? Status.CONVENIO : Status.PENDENTE);
-        if (novoCadastro.getTotalDias() <= 0) {
-            throw new IllegalArgumentException("A data de chegada deve ser anterior à data de saída.");
-        }
 
         return cadastroRepository.save(novoCadastro);
     }
@@ -82,6 +78,7 @@ public class CadastroService {
                 .filter(cadastro -> cadastro.getConvenio() != null
                         && cadastro.getConvenio().getId().equals(convenioId)
                         && cadastro.getStatus() != Status.CANCELADO
+                        && cadastro.getDataDeChegada() != null
                         && cadastro.getDataDeChegada().getMonthValue() == mes
                         && cadastro.getDataDeChegada().getYear() == ano)
                 .toList();
