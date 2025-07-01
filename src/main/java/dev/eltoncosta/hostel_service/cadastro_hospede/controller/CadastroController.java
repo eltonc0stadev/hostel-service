@@ -40,6 +40,9 @@ public class CadastroController {
             @RequestParam("mes") Integer mes,
             @RequestParam("ano") Integer ano,
             @RequestParam("convenioid") String convenioId) {
+        if (mes == null || ano == null || convenioId == null) {
+            throw new IllegalArgumentException("Parâmetros 'mes', 'ano' e 'convenioid' são obrigatórios.");
+        }
         return cadastroService.listarCadastrosPorConvenioEMesEAno(convenioId, mes, ano);
     }
 
